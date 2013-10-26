@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HTW Calendar</string>
+    <string name="dialog_received_data">%1$d. Versuch, die Daten herunter zu laden ...</string>
+    <string name="dialog_data_download_failure">Die Daten konnten nicht herunter geladen werden</string>
+    <string name="no_cal_data_there">Es liegen keine Calendar-Daten vor</string>
+    <string name="ok">Ok</string>
+</resources>
