@@ -144,12 +144,14 @@ public class CalDAO implements ICal {
 
 	public void updateCalendar(char[] username, char[] password)
 			throws LoginDataIncorrectException, DataCannotReceivedException {
-
+		System.out.println("CalDAO: attampt to update the calendar");
 		try {
 			WebAccess webA = new WebAccess();
 			String content = webA.doAutomatically(new String(username),
 					new String(password));
+			System.out.println("CalDAO: content string was loaded successfully");
 			loadCalendar(content);
+			System.out.println("CalDAO: calendar was setted");
 		} catch (SocketTimeoutException e) {
 			throw new DataCannotReceivedException();
 		} catch (IllegalArgumentException e) {

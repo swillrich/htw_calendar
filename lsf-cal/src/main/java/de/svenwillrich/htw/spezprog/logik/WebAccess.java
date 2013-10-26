@@ -30,6 +30,7 @@ public class WebAccess {
 			"JSESSIONID", "");
 	private final static Map<String, String> loginMap;
 	private final static Map<String, String> calendarViewMap;
+	private static final int TIMEOUT = 60 * 1000;
 
 	static {
 		loginMap = new HashMap<String, String>();
@@ -56,22 +57,29 @@ public class WebAccess {
 
 	public String doAutomatically(String username, String pw)
 			throws IOException {
-		return getICalContent(getCalendarWebView(login(username,
-				pw)));
+		System.out.println("WebAccess: attampt to run through automatically");
+		String content = getICalContent(getCalendarWebView(login(username, pw)));
+		System.out
+				.println("WebAccess: content successfully getted, it contains "
+						+ content.length() + " chars");
+		return content;
 	}
 
 	public Document login(String username, String pw) throws IOException {
 		loginMap.put("username", username);
 		loginMap.put("password", pw);
+		System.out
+				.println("WebAccess: attampt to login with given username and password");
 
-		Response response = Jsoup.connect(URL_START_LSF).data(loginMap)
-				.method(Method.POST).execute();
+		Response response = Jsoup.connect(URL_START_LSF).timeout(TIMEOUT)
+				.data(loginMap).method(Method.POST).execute();
 		cookieValue.setValue(response.cookie(cookieValue.getKey()));
 		return response.parse();
 	}
 
 	public Document getCalendarWebView(Document doc) throws IOException {
-		Document receivedDoc = Jsoup.connect(URL_CORRECT_VIEW)
+		System.out.println("WebAccess: attampt to get view with calendar");
+		Document receivedDoc = Jsoup.connect(URL_CORRECT_VIEW).timeout(TIMEOUT)
 				.cookie(cookieValue.getKey(), cookieValue.getValue())
 				.data(calendarViewMap).method(Method.POST).execute().parse();
 
@@ -79,13 +87,15 @@ public class WebAccess {
 	}
 
 	public String getICalContent(Document doc) throws IOException {
+		System.out
+				.println("WebAccess: attampt to get content of iCal document");
 		Response calContent = null;
 
 		String calendarLink = doc.getElementsByAttributeValueContaining("href",
 				"moduleCall=iCalendarPlan").attr("href");
 		calContent = null;
 		try {
-			calContent = Jsoup.connect(calendarLink)
+			calContent = Jsoup.connect(calendarLink).timeout(TIMEOUT)
 					.cookie(cookieValue.getKey(), cookieValue.getValue())
 					.method(Method.POST).execute();
 		} catch (IllegalArgumentException e) {
