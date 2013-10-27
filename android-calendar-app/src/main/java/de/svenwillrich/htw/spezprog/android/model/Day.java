@@ -5,10 +5,13 @@ package de.svenwillrich.htw.spezprog.android.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
-import de.svenwillrich.htw.spezprog.logik.Utils;
+import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
+import de.svenwillrich.htw.spezprog.model.Event;
 
 /**
  * @author Sven Willrich Spezielle Programmierung: Android Datum: 23.10.2013
@@ -25,9 +28,30 @@ public class Day {
 	public static final String TIME_WITHOUT_SECS = "HH:mm";
 	public static final String WEEKDAY = "EEEE";
 	public static final String WEEKDAY_SHORT = "EEE";
+	private List<Event> eventsOfDay = new ArrayList<Event>();
 
 	public Day(String dateAsString) {
 		this(DATE_TIME_LONG, dateAsString);
+	}
+
+	public boolean hasEvents() {
+		if (getEventsOfDay().size() > 0)
+			return true;
+		else
+			return false;
+	}
+	
+	public List<Event> getEventsOfDay() {
+		return eventsOfDay;
+	}
+
+	public boolean load() {
+		if (CalendarAdapter.getInstance().isCalendarLoaded()) {
+			eventsOfDay = CalendarAdapter.getInstance().getCalendar()
+					.getEventsFromDate(this.getDateOfDay());
+			return true;
+		} else
+			return false;
 	}
 
 	public Day(String pattern, String dateAsString) {

@@ -18,7 +18,7 @@ import de.svenwillrich.htw.spezprog.model.Event;
  */
 
 public interface ICal {
-	public void updateCalendar(char[] username, char[] password)
+	public String updateCalendar(char[] username, char[] password)
 			throws LoginDataIncorrectException, DataCannotReceivedException;
 
 	public List<Event> getEvents() throws CalDataNotLoadedException;
@@ -28,4 +28,6 @@ public interface ICal {
 
 	public List<Event> getEventsBetweenDates(Date from, Date to)
 			throws CalDataNotLoadedException;
+	
+	public void loadCalendar(String calAsString);
 }

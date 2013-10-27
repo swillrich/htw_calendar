@@ -1,3 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item
+        android:id="@+id/menu_item_settings"
+        android:showAsAction="always"
+        android:title="@string/settings"/>
+    <item
+        android:id="@+id/menu_item_update"
+        android:showAsAction="always"
+        android:title="@string/update"/>
 </menu>

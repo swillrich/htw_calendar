@@ -8,18 +8,21 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
+import de.svenwillrich.htw.spezprog.android.R;
 import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
-import de.svenwillrich.htw.spezprog.android.view.ReceivedDataUI;
+import de.svenwillrich.htw.spezprog.android.view.dialog.AskForUpdateDialog;
+import de.svenwillrich.htw.spezprog.android.view.dialog.SettingsDialog;
 import de.svenwillrich.htw.spezprog.android.view.fragment.DayListFragment;
 import de.svenwillrich.htw.spezprog.android.view.fragment.EventListFragment;
-import de.svenwillrich.htw.spezprog.android.R;
 import de.svenwillrich.htw.spezprog.exception.CalDataNotLoadedException;
 import de.svenwillrich.htw.spezprog.logik.ICal;
 import de.svenwillrich.htw.spezprog.model.Event;
@@ -37,13 +40,8 @@ public class CalActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.framelayout_main);
-
+		CalendarAdapter.getInstance().load(this);
 		refresh(false, true, null);
-	}
-
-	private void startCalendarUpdateUI() {
-		ReceivedDataUI receivedDataUI = new ReceivedDataUI(this);
-		receivedDataUI.startProcess();
 	}
 
 	public boolean isLandScape() {
@@ -55,14 +53,15 @@ public class CalActivity extends Activity implements
 		}
 	}
 
-	public void change(Date date) {
+	public void onChange(Date date) {
 		refresh(false, false, date);
 	}
 
 	public void refresh(boolean isOnBackPressed, boolean isActivityStart,
 			Date date) {
-		if (!CalendarAdapter.getInstance().isUpToDate()) {
-			askForUpdate();
+		if (!CalendarAdapter.getInstance().isCalendarLoaded()) {
+			Toast.makeText(this, R.string.no_cal_data_there, Toast.LENGTH_LONG)
+					.show();
 			return;
 		}
 
@@ -79,8 +78,8 @@ public class CalActivity extends Activity implements
 		}
 		List<Event> events = null;
 		try {
-			CalendarAdapter calendarFactory = CalendarAdapter.getInstance();
-			ICal calendar = calendarFactory.getCalendar();
+			CalendarAdapter calendarAdapter = CalendarAdapter.getInstance();
+			ICal calendar = calendarAdapter.getCalendar();
 			events = calendar.getEventsFromDate(date);
 		} catch (CalDataNotLoadedException e) {
 			events = new ArrayList<Event>();
@@ -110,30 +109,34 @@ public class CalActivity extends Activity implements
 
 	@Override
 	public void onBackPressed() {
-		refresh(true, false, null);
+		Fragment fragment = getFragmentManager().findFragmentById(
+				R.id.fragment_container);
+		if (fragment instanceof EventListFragment) {
+			refresh(true, false, null);
+		} else {
+			finish();
+		}
+
 	}
 
-	private void askForUpdate() {
-		if (!CalendarAdapter.getInstance().isUpToDate()) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setNegativeButton("nein",
-					new DialogInterface.OnClickListener() {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
 
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-
-						}
-					});
-			builder.setPositiveButton("OK",
-					new DialogInterface.OnClickListener() {
-
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-							startCalendarUpdateUI();
-						}
-					});
-			builder.setTitle("holen?");
-			builder.create().show();
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_item_settings:
+			new SettingsDialog().getDialog(this).show();
+			return true;
+		case R.id.menu_item_update:
+			new AskForUpdateDialog().askForUpdate(this);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 }

@@ -6,4 +6,6 @@ public interface IDataReceiverAttampter {
 	public void onSuccess();
 
 	public final static int ATTAMPTS = 3;
+
+	public void onFailureBadPassword();
 }

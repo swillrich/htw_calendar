@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import net.fortuna.ical4j.model.DateTime;
-
 import de.svenwillrich.htw.spezprog.logik.Utils;
 
 /**

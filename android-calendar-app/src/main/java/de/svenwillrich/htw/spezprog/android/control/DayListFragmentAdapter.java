@@ -29,9 +29,14 @@ public class DayListFragmentAdapter extends ArrayAdapter {
 				(ViewGroup) parent.findViewById(R.id.fragment_daylist), false);
 		TextView textView = (TextView) layout.findViewById(R.id.day);
 		Day day = getList().get(position);
+		day.load();
 		String text = day.getDateFormatted(Day.WEEKDAY_SHORT) + ", "
 				+ day.getDateFormatted(Day.DATE_SHORT);
-		textView.setText(text);
+		String add = " ";
+		if (day.getEventsOfDay().size() > 0) {
+			add += "(" + day.getEventsOfDay().size() + " Events)";
+		}
+		textView.setText(text + add);
 		return layout;
 	}
 

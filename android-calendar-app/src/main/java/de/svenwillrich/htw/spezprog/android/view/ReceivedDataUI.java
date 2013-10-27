@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 import de.svenwillrich.htw.spezprog.android.R;
 import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
 import de.svenwillrich.htw.spezprog.android.control.cal.IDataReceiverAttampter;
+import de.svenwillrich.htw.spezprog.android.model.logic.SettingHelper;
 import de.svenwillrich.htw.spezprog.android.view.activity.CalActivity;
+import de.svenwillrich.htw.spezprog.android.view.dialog.ReceivedDataProgressDialog;
 
 /**
  * @author Sven Willrich
@@ -28,6 +31,7 @@ public class ReceivedDataUI {
 	private final static int MSG_UPDATE = 1;
 	private final static int MSG_SUCCESS = 2;
 	private final static int MSG_FAILURE = 3;
+	private final static int MSG_BADPASSWORD = 4;
 	private final static String MSG_KEY = "msg";
 	private final static String MSG_KEY_DATA_SUCCESS = "counter";
 
@@ -43,15 +47,29 @@ public class ReceivedDataUI {
 				break;
 			case MSG_SUCCESS:
 				finish();
+				Toast.makeText(activity, R.string.data_loading_successfully,
+						Toast.LENGTH_LONG).show();
+				new SettingHelper(activity).commitCalendar(CalendarAdapter
+						.getInstance().getCalendarAsString());
+				CalendarAdapter.getInstance().load(activity);
 				((CalActivity) activity).refresh(false, true, null);
 				break;
 			case MSG_FAILURE:
 				showFailureDialog();
 				break;
+			case MSG_BADPASSWORD:
+				badPasswordToast();
+				break;
 			}
 		}
 
 	};
+
+	public void badPasswordToast() {
+		finish();
+		Toast.makeText(activity, R.string.bad_password, Toast.LENGTH_LONG)
+				.show();
+	}
 
 	public ReceivedDataUI(Activity activity) {
 		this.activity = activity;
@@ -66,9 +84,7 @@ public class ReceivedDataUI {
 
 	private void updateDialog(int counter) {
 		finish();
-		dialog = new ProgressDialog(activity);
-		dialog.setMessage(activity.getString(R.string.dialog_received_data,
-				counter));
+		dialog = new ReceivedDataProgressDialog().getDialog(activity, counter);
 		dialog.show();
 	}
 
@@ -117,6 +133,10 @@ public class ReceivedDataUI {
 
 		public void onSuccess() {
 			handler.sendMessage(getMessage(MSG_SUCCESS));
+		}
+
+		public void onFailureBadPassword() {
+			handler.sendMessage(getMessage(MSG_BADPASSWORD));
 		}
 	}
 

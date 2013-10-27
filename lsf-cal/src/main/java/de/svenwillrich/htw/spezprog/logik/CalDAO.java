@@ -142,7 +142,7 @@ public class CalDAO implements ICal {
 				+ Utils.getDateAsString(dates.get(Event.Prop.END)));
 	}
 
-	public void updateCalendar(char[] username, char[] password)
+	public String updateCalendar(char[] username, char[] password)
 			throws LoginDataIncorrectException, DataCannotReceivedException {
 		System.out.println("CalDAO: attampt to update the calendar");
 		try {
@@ -152,6 +152,7 @@ public class CalDAO implements ICal {
 			System.out.println("CalDAO: content string was loaded successfully");
 			loadCalendar(content);
 			System.out.println("CalDAO: calendar was setted");
+			return content;
 		} catch (SocketTimeoutException e) {
 			throw new DataCannotReceivedException();
 		} catch (IllegalArgumentException e) {
@@ -159,6 +160,7 @@ public class CalDAO implements ICal {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 
 	}
 }

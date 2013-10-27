@@ -6,4 +6,16 @@
     <string name="dialog_data_download_failure">Die Daten konnten nicht herunter geladen werden</string>
     <string name="no_cal_data_there">Es liegen keine Calendar-Daten vor</string>
     <string name="ok">Ok</string>
+    <string name="update">Update</string>
+    <string name="nein">Nein</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="settings_save_failure_msg">Beim Speichern trat ein Fehler auf</string>
+    <string name="settings_save_success_msg">Speichern erfolgreich</string>
+    <string name="should_runthrough_update">Soll ein Update durchgeführt werden?</string>
+    <string name="perform_update">Ein Update durchführen</string>
+    <string name="no_settings">Erst Einstellung vornehmen</string>
+    <string name="bad_password">Falsches Passwort: Einstellungen korrigieren</string>
+    <string name="data_loading_successfully">Daten erfolgreich geladen</string>
 </resources>

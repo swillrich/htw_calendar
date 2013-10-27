@@ -34,9 +34,6 @@ public class DayListFragment extends ListFragment {
 		DayListOnItemClickListener listener = new DayListOnItemClickListener();
 		getListView().setOnItemClickListener(listener);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//		if (isWithInit) {
-//			getListView().performItemClick(null, 0, 0);
-//		}
 	}
 
 	public class DayListOnItemClickListener implements OnItemClickListener {
@@ -45,9 +42,10 @@ public class DayListFragment extends ListFragment {
 				long arg3) {
 			Date date = ((DayListFragmentAdapter) getListAdapter()).getList()
 					.get(arg2).getDateOfDay();
-			dayChangedListener.change(date);
+			dayChangedListener.onChange(date);
 			Log.i(this.getClass().getName(), "item " + arg2 + " checked");
-			Log.i(this.getClass().getName(), Utils.getDateAsString(date) + " was selected");
+			Log.i(this.getClass().getName(), Utils.getDateAsString(date)
+					+ " was selected");
 		}
 	}
 
@@ -56,7 +54,7 @@ public class DayListFragment extends ListFragment {
 	}
 
 	public interface DayChangedListener {
-		public void change(Date date);
+		public void onChange(Date date);
 	}
 
 	public void setWithInit(boolean isWithInit) {
