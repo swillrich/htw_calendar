@@ -11,12 +11,16 @@ import de.svenwillrich.htw.spezprog.logik.Utils;
  * @author Sven Willrich
  * Spezielle Programmierung: Android
  * Datum: 19.10.2013
+ * Beschreibung: HTWEvent, als speziell auf die HTW-Umgebung zugeschnitten ist und von Event erbt
  */
 
 public class HTWEvent extends Event {
 	private Categorie categorie;
 	private VEvent vEvent;
 
+	/**
+	 * HTW-Event kann cal4j Events akzeptieren und deren Daden laden
+	 */
 	public HTWEvent acceptVEvent(VEvent vEvent) {
 		this.vEvent = vEvent;
 		String categorieValue = getVEvent().getProperty(Property.CATEGORIES)
@@ -38,6 +42,12 @@ public class HTWEvent extends Event {
 		return vEvent;
 	}
 
+	/**
+	 * @author Sven Willrich
+	 * Spezielle Programmierung: Android
+	 * Datum: 29.10.2013
+	 * Beschreibung: Speichert die Kategorien, die ein HTW-Event haben kann
+	 */
 	static enum Categorie {
 		Uebung("Übung"), SUUE("seminaristischer Unterricht/Übung"), SePr(
 				"Seminar/Projektseminar"), SU("seminaristischer Unterricht");

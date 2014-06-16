@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.svenwillrich.htw.spezprog.android.R;
+import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
 import de.svenwillrich.htw.spezprog.android.model.Day;
 import de.svenwillrich.htw.spezprog.android.model.DayList;
 

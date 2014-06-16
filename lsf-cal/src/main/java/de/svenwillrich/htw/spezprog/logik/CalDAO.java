@@ -28,9 +28,19 @@ import de.svenwillrich.htw.spezprog.exception.LoginDataIncorrectException;
 import de.svenwillrich.htw.spezprog.model.Event;
 import de.svenwillrich.htw.spezprog.model.HTWEvent;
 
+/**
+ * @author Sven Willrich
+ * Spezielle Programmierung: Android
+ * Datum: 29.10.2013
+ * Beschreibung: CalDAO (Calendar Data Access Object) stellt die 
+ * Daten bereit, die der Calendar speichert
+ */
 public class CalDAO implements ICal {
 	Calendar cal;
 
+	/*
+	 * Lädt den Calendar mit den Daten (String), die die Methode übergeben bekommt
+	 */
 	public void loadCalendar(String content) {
 		CalendarBuilder builder = new CalendarBuilder();
 		try {
@@ -55,6 +65,9 @@ public class CalDAO implements ICal {
 		this.cal = cal;
 	}
 
+	/**
+	 * Konvertiert eine Liste mit VEvents (cal4j) zu einer Liste mit Events (selbst)
+	 */
 	public List<Event> convertVEventListToEventList(List<VEvent> vEvents) {
 		List<Event> events = new ArrayList<Event>();
 		Iterator iterator = vEvents.iterator();
@@ -67,10 +80,16 @@ public class CalDAO implements ICal {
 		return events;
 	}
 
+	/* 
+	 *	Gibt alle Events, die der Calendar speichert, zurück 
+	 */
 	public List<Event> getEvents() {
 		return convertVEventListToEventList(getCal().getComponents());
 	}
 
+	/**
+	 * Gibt als Liste die Eigenschaften zurück, die ein VEvent hat
+	 */
 	public List<Property> getPropertiesFromEvent(VEvent event) {
 		List<Property> properties = new ArrayList<Property>();
 		Iterator iterator = event.getProperties().iterator();
@@ -80,11 +99,17 @@ public class CalDAO implements ICal {
 		return properties;
 	}
 
+	/* 
+	 * Gibt alle Events zurück, die an einem bestimmten Datum stattfinden
+	 */
 	public List<Event> getEventsFromDate(Date date)
 			throws CalDataNotLoadedException {
 		return getEventsBetweenDates(date, Utils.addDays(date, 1));
 	}
 
+	/*
+	 * Gibt alle Events zurück, die zwischen zwei Daten stattfinden
+	 */
 	public List<Event> getEventsBetweenDates(Date from, Date to)
 			throws CalDataNotLoadedException {
 		if (cal == null) {
@@ -108,15 +133,9 @@ public class CalDAO implements ICal {
 		return convertVEventListToEventList(events);
 	}
 
-	public Event getFullEvent(Event event) {
-		for (Event e : getEvents()) {
-			if (event.equals(e)) {
-				return e;
-			}
-		}
-		return null;
-	}
-
+	/**
+	 *  Gibt die Anfang- und Ende-Daten eines Events zurück
+	 */
 	public Map<Event.Prop, Date> getDatesFromEvent(Event e) {
 		HashMap<Event.Prop, Date> map = new HashMap<Event.Prop, Date>();
 		VEvent vEvent = ((HTWEvent) e).getVEvent();
@@ -134,6 +153,9 @@ public class CalDAO implements ICal {
 		return map;
 	}
 
+	/**
+	 * Printet Anfang- und Ende-Datum eines Events auf der Konsole aus
+	 */
 	public void printDate(Event e) {
 		Map<Event.Prop, Date> dates = getDatesFromEvent(e);
 		System.out.println("START "
@@ -142,6 +164,10 @@ public class CalDAO implements ICal {
 				+ Utils.getDateAsString(dates.get(Event.Prop.END)));
 	}
 
+	/* 
+	 * Es wird ein Kalendar-Update durchgeführt. D.h. anhand von 
+	 * username und password wird sich eingeloggt und die Daten erneut geladen
+	 */
 	public String updateCalendar(char[] username, char[] password)
 			throws LoginDataIncorrectException, DataCannotReceivedException {
 		System.out.println("CalDAO: attampt to update the calendar");
@@ -149,7 +175,8 @@ public class CalDAO implements ICal {
 			WebAccess webA = new WebAccess();
 			String content = webA.doAutomatically(new String(username),
 					new String(password));
-			System.out.println("CalDAO: content string was loaded successfully");
+			System.out
+					.println("CalDAO: content string was loaded successfully");
 			loadCalendar(content);
 			System.out.println("CalDAO: calendar was setted");
 			return content;

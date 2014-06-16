@@ -46,10 +46,14 @@ public class CalendarAdapter {
 		calendar = new CalDAO();
 		if (areUsernamePasswordGiven()) {
 			if (setting.getCalendar() != null) {
+				Log.i(this.getClass().getName(),
+						"calendar adapter load: calendar data loaded");
 				setCalendarAsString(new String(setting.getCalendar()));
 				calendar.loadCalendar(getCalendarAsString());
 				isCalendarLoaded = true;
 			} else {
+				Log.i(this.getClass().getName(),
+						"calendar adapter load: calendar data NOT loaded");
 				isCalendarLoaded = false;
 			}
 		}

@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import de.svenwillrich.htw.spezprog.android.R;
 import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
+import de.svenwillrich.htw.spezprog.android.model.logic.SettingHelper;
 import de.svenwillrich.htw.spezprog.android.view.dialog.AskForUpdateDialog;
 import de.svenwillrich.htw.spezprog.android.view.dialog.SettingsDialog;
 import de.svenwillrich.htw.spezprog.android.view.fragment.DayListFragment;
@@ -59,14 +60,26 @@ public class CalActivity extends Activity implements
 
 	public void refresh(boolean isOnBackPressed, boolean isActivityStart,
 			Date date) {
+		FragmentTransaction transaction = getFragmentManager()
+				.beginTransaction();
+
+		CalendarAdapter.getInstance().load(this);
 		if (!CalendarAdapter.getInstance().isCalendarLoaded()) {
 			Toast.makeText(this, R.string.no_cal_data_there, Toast.LENGTH_LONG)
 					.show();
+
+			int[] fragmentIds = new int[] { R.id.fragment_container,
+					R.id.fragment_daylist, R.id.fragment_eventlist };
+			for (int fragmentId : fragmentIds) {
+				Fragment fragment = getFragmentManager().findFragmentById(
+						fragmentId);
+				if (fragment != null) {
+					transaction.remove(fragment);
+				}
+			}
+			transaction.commit();
 			return;
 		}
-
-		FragmentTransaction transaction = getFragmentManager()
-				.beginTransaction();
 
 		DayListFragment dayListFragment = new DayListFragment();
 		dayListFragment.setDayChangedListener(this);
@@ -134,6 +147,17 @@ public class CalActivity extends Activity implements
 			return true;
 		case R.id.menu_item_update:
 			new AskForUpdateDialog().askForUpdate(this);
+			return true;
+		case R.id.menu_item_remove:
+			if (new SettingHelper(this).delete()) {
+				Toast.makeText(this, R.string.deleting_successfully,
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(this, R.string.deleting_failed,
+						Toast.LENGTH_LONG).show();
+			}
+			CalendarAdapter.getInstance().load(this);
+			refresh(false, true, null);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

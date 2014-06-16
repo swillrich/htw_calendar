@@ -8,4 +8,8 @@
         android:id="@+id/menu_item_update"
         android:showAsAction="always"
         android:title="@string/update"/>
-</menu>
+    <item
+        android:id="@+id/menu_item_remove"
+        android:showAsAction="always"
+        android:title="@string/remove"/>
+</menu>

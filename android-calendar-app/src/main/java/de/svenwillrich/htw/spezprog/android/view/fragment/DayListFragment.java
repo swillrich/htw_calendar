@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import de.svenwillrich.htw.spezprog.android.control.DayListFragmentAdapter;
+import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
 import de.svenwillrich.htw.spezprog.android.model.DayList;
 import de.svenwillrich.htw.spezprog.logik.Utils;
 
@@ -26,6 +27,12 @@ public class DayListFragment extends ListFragment {
 				getActivity(), dayList);
 		setListAdapter(adapter);
 		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public void onResume() {
+		CalendarAdapter.getInstance().load(getActivity());
+		super.onResume();
 	}
 
 	@Override

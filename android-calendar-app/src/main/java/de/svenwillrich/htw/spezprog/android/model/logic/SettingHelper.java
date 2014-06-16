@@ -46,7 +46,11 @@ public class SettingHelper {
 		setting.setLastUpdate(new Date());
 		setting.setUsername(username);
 		setting.setPassword(convertToByte(password));
-		setting.setCalendar(calAsString.toCharArray());
+		if (calAsString != null) {
+			setting.setCalendar(calAsString.toCharArray());
+		} else {
+			setting.setCalendar(null);
+		}
 
 		String json = new Gson().toJson(setting);
 		byte[] jsonAsBytes = convertToByte(json.toCharArray());
@@ -61,6 +65,10 @@ public class SettingHelper {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	public boolean delete() {
+		return context.deleteFile(Setting.FILE_NAEME);
 	}
 
 	public boolean commitCalendar(String calAsString) {

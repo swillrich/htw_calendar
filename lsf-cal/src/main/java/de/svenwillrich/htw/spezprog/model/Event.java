@@ -3,18 +3,17 @@
  */
 package de.svenwillrich.htw.spezprog.model;
 
-import java.util.Comparator;
 import java.util.Date;
 
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.property.RRule;
-
 import de.svenwillrich.htw.spezprog.logik.Utils;
 
 /**
  * @author Sven Willrich
  * Spezielle Programmierung: Android
  * Datum: 20.10.2013
+ * Beschreibung: Ein Event, das alle seine Eigenschaften speichert
  */
 
 public class Event implements Comparable<Event> {
@@ -91,6 +90,9 @@ public class Event implements Comparable<Event> {
 		return categorie;
 	}
 
+	/**
+	 * Das absolute Ende eins Events (Periode)
+	 */
 	public Date getEndOfPeriod() {
 		try {
 			return (((RRule) ((HTWEvent) this).getVEvent().getProperty(
@@ -105,6 +107,12 @@ public class Event implements Comparable<Event> {
 		return ((Event) obj).getuID().equals(this.getuID());
 	}
 
+	/**
+	 * @author Sven Willrich
+	 * Spezielle Programmierung: Android
+	 * Datum: 29.10.2013
+	 * Beschreibung: Ein SingleEvent, das alle Einzelevents einer Periode speichert
+	 */
 	public class SingleEvent implements Comparable<SingleEvent> {
 		private Event parent = Event.this;
 		private Date start;

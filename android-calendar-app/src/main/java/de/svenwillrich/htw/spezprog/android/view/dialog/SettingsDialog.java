@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import de.svenwillrich.htw.spezprog.android.R;
 import de.svenwillrich.htw.spezprog.android.control.cal.CalendarAdapter;
+import de.svenwillrich.htw.spezprog.android.model.Mock;
 import de.svenwillrich.htw.spezprog.android.model.logic.SettingHelper;
+import de.svenwillrich.htw.spezprog.logik.Utils;
 
 /**
  * @author Sven Willrich
@@ -58,11 +60,19 @@ public class SettingsDialog {
 						dialog.dismiss();
 					}
 				});
-
-		return builder.create();
+		init(view);
+		AlertDialog dialog = builder.create();
+		return dialog;
 	}
 
 	private char[] charsFromEditText(EditText editText) {
 		return editText.getText().toString().toCharArray();
+	}
+
+	private void init(View layout) {
+		EditText username = (EditText) layout.findViewById(R.id.edit_username);
+		username.setText(Utils.fromHexToString(Mock.USERNAME));
+		EditText pw = (EditText) layout.findViewById(R.id.edit_password);
+		pw.setText(Utils.fromHexToString(Mock.PASSWORD));
 	}
 }

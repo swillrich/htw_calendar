@@ -18,4 +18,7 @@
     <string name="no_settings">Erst Einstellung vornehmen</string>
     <string name="bad_password">Falsches Passwort: Einstellungen korrigieren</string>
     <string name="data_loading_successfully">Daten erfolgreich geladen</string>
+    <string name="remove">löschen</string>
+    <string name="deleting_successfully">Löschen erfolgreich</string>
+    <string name="deleting_failed">Löschen fehlgeschlagen</string>
 </resources>

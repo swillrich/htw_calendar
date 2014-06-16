@@ -6,6 +6,7 @@ de\svenwillrich\htw\spezprog\android\view\dialog\SettingsDialog.class
 de\svenwillrich\htw\spezprog\android\R$attr.class
 de\svenwillrich\htw\spezprog\android\R$layout.class
 de\svenwillrich\htw\spezprog\android\view\ReceivedDataUI$2.class
+de\svenwillrich\htw\spezprog\android\model\Mock.class
 de\svenwillrich\htw\spezprog\android\view\dialog\AskForUpdateDialog$1.class
 de\svenwillrich\htw\spezprog\android\control\cal\CalendarAdapter$1.class
 de\svenwillrich\htw\spezprog\android\R$dimen.class

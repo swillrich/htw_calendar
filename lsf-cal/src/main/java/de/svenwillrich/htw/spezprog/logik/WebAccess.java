@@ -4,7 +4,6 @@
 package de.svenwillrich.htw.spezprog.logik;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
@@ -21,17 +20,35 @@ import de.svenwillrich.htw.spezprog.exception.LoginDataIncorrectException;
  * @author Sven Willrich Spezielle Programmierung: Android Datum: 18.10.2013
  * 
  */
+/**
+ * @author Sven Willrich
+ * Spezielle Programmierung: Android
+ * Datum: 29.10.2013
+ */
 public class WebAccess {
 
 	private final static String URL_START_LSF = "https://lsf.htw-berlin.de/qisserver/rds?state=user&type=1";
 	private final static String URL_CORRECT_VIEW = "https://lsf.htw-berlin.de/qisserver/rds?state=wplan&act=&pool=&show=plan&P.vx=kurz";
 
+	/**
+	 * Speichert das LSF-Cookie
+	 */
 	AbstractMap.SimpleEntry<String, String> cookieValue = new SimpleEntry<String, String>(
 			"JSESSIONID", "");
+	/**
+	 * Speichert die Daten für den Login in einer Map
+	 */
 	private final static Map<String, String> loginMap;
+	/**
+	 * Speichert die Parameter für die Calendar-Ansicht in einer Map
+	 */
 	private final static Map<String, String> calendarViewMap;
+	/**
+	 * Timeout für den Lese-Vorgang
+	 */
 	private static final int TIMEOUT = 60 * 1000;
 
+	// Maps werden initialisiert
 	static {
 		loginMap = new HashMap<String, String>();
 		loginMap.put("username", "");
@@ -55,6 +72,10 @@ public class WebAccess {
 
 	}
 
+	/**
+	 * Alle Schritte für den Download des Calendars werden automatisch durchlaufen
+	 * login -> Calendar-Ansicht laden -> Inhalt laden -> Inhalt zurückgegeben
+	 */
 	public String doAutomatically(String username, String pw)
 			throws IOException {
 		System.out.println("WebAccess: attampt to run through automatically");
@@ -65,6 +86,9 @@ public class WebAccess {
 		return content;
 	}
 
+	/**
+	 * Login bei der HTW-Seite anhand Nutzername und PW
+	 */
 	public Document login(String username, String pw) throws IOException {
 		loginMap.put("username", username);
 		loginMap.put("password", pw);
@@ -77,6 +101,9 @@ public class WebAccess {
 		return response.parse();
 	}
 
+	/**
+	 * Gibt die Website als Document zurück, die den Calendar enthält
+	 */
 	public Document getCalendarWebView(Document doc) throws IOException {
 		System.out.println("WebAccess: attampt to get view with calendar");
 		Document receivedDoc = Jsoup.connect(URL_CORRECT_VIEW).timeout(TIMEOUT)
@@ -86,6 +113,10 @@ public class WebAccess {
 		return receivedDoc;
 	}
 
+	/**
+	 * Anhand der Calendar-Website wird der Link für den Download der iCal-Datei gesucht,
+	 * der Download gestartet und die heruntergeladenen Daten zurückgegeben
+	 */
 	public String getICalContent(Document doc) throws IOException {
 		System.out
 				.println("WebAccess: attampt to get content of iCal document");
